@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Guerreiro de Fé</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #050505, #171717, #000000);
+      color: white;
+      font-family: Arial, Helvetica, sans-serif;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      padding: 30px 20px;
+    }
+
+    .titulo {
+      font-size: clamp(42px, 9vw, 90px);
+      font-weight: 900;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+    }
+
+    .subtitulo {
+      font-size: clamp(18px, 4vw, 30px);
+      margin-bottom: 45px;
+      opacity: 0.9;
+    }
+
+    .contador {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+
+    .bloco {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 18px;
+      padding: 25px 10px;
+      backdrop-filter: blur(8px);
+    }
+
+    .numero {
+      font-size: clamp(38px, 8vw, 75px);
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .label {
+      margin-top: 12px;
+      font-size: clamp(12px, 2.5vw, 18px);
+      text-transform: uppercase;
+      opacity: 0.75;
+      letter-spacing: 2px;
+    }
+
+    .mensagem {
+      margin-top: 45px;
+      font-size: clamp(18px, 4vw, 28px);
+      font-weight: bold;
+    }
+
+    .finalizado {
+      font-size: clamp(30px, 7vw, 65px);
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      .contador {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .bloco {
+        padding: 20px 8px;
+      }
+
+      .subtitulo {
+        margin-bottom: 30px;
+      }
+
+      .mensagem {
+        margin-top: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="titulo">
+      Guerreiro de Fé
+    </div>
+
+    <div class="subtitulo">
+      Prepare-se! O grande momento está chegando...
+    </div>
+
+    <div id="contador" class="contador">
+
+      <div class="bloco">
+        <div id="dias" class="numero">00</div>
+        <div class="label">Dias</div>
+      </div>
+
+      <div class="bloco">
+        <div id="horas" class="numero">00</div>
+        <div class="label">Horas</div>
+      </div>
+
+      <div class="bloco">
+        <div id="minutos" class="numero">00</div>
+        <div class="label">Minutos</div>
+      </div>
+
+      <div class="bloco">
+        <div id="segundos" class="numero">00</div>
+        <div class="label">Segundos</div>
+      </div>
+
+    </div>
+
+    <div id="mensagem" class="mensagem">
+      24 de outubro de 2026 • 19:30
+    </div>
+
+  </div>
+
+  <script>
+
+    // DATA DO EVENTO
+    const dataEvento = new Date("2026-10-24T19:30:00-03:00").getTime();
+
+    function atualizarContador() {
+
+      const agora = new Date().getTime();
+      const diferenca = dataEvento - agora;
+
+      if (diferenca <= 0) {
+
+        document.getElementById("contador").innerHTML =
+          '<div class="finalizado">O MOMENTO CHEGOU!</div>';
+
+        document.getElementById("mensagem").innerHTML =
+          "Guerreiro de Fé • 24/10/2026";
+
+        return;
+      }
+
+      const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+
+      const horas = Math.floor(
+        (diferenca % (1000 * 60 * 60 * 24)) /
+        (1000 * 60 * 60)
+      );
+
+      const minutos = Math.floor(
+        (diferenca % (1000 * 60 * 60)) /
+        (1000 * 60)
+      );
+
+      const segundos = Math.floor(
+        (diferenca % (1000 * 60)) /
+        1000
+      );
+
+      document.getElementById("dias").textContent =
+        String(dias).padStart(2, "0");
+
+      document.getElementById("horas").textContent =
+        String(horas).padStart(2, "0");
+
+      document.getElementById("minutos").textContent =
+        String(minutos).padStart(2, "0");
+
+      document.getElementById("segundos").textContent =
+        String(segundos).padStart(2, "0");
+    }
+
+    atualizarContador();
+
+    setInterval(atualizarContador, 1000);
+
+  </script>
+
+</body>
+</html>
