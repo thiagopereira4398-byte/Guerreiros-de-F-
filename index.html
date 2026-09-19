@@ -1,467 +1,887 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Guerreiro de Fé</title>
+<title>Guerreiro de Fé</title>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,body{
+    width:100%;
+    min-height:100%;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    color:#fff;
+    background:#050505;
+    overflow-x:hidden;
+}
+
+/* FUNDO DO EVENTO */
+
+.fundo{
+    position:fixed;
+    inset:0;
+
+    background-image:
+        linear-gradient(
+            rgba(0,0,0,.62),
+            rgba(0,0,0,.78)
+        ),
+        url("fundo-evento.jpg");
+
+    background-size:cover;
+    background-position:center;
+    z-index:-3;
+
+    transform:scale(1.03);
+}
+
+/* BRILHO QUENTE */
+
+.fundo::after{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(255,150,20,.12),
+            transparent 45%
+        ),
+        linear-gradient(
+            90deg,
+            rgba(0,0,0,.45),
+            transparent,
+            rgba(0,0,0,.45)
+        );
+}
+
+/* BRASAS */
+
+.brasas{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:1;
+    overflow:hidden;
+}
+
+.brasa{
+    position:absolute;
+    bottom:-20px;
+
+    width:4px;
+    height:4px;
+
+    border-radius:50%;
+
+    background:#ffb52e;
+
+    box-shadow:
+        0 0 8px #ff7b00,
+        0 0 15px #ff4500;
+
+    animation:subir linear infinite;
+    opacity:0;
+}
+
+@keyframes subir{
+
+    0%{
+        transform:translateY(0) translateX(0);
+        opacity:0;
     }
 
-    html, body {
-      width: 100%;
-      height: 100%;
+    15%{
+        opacity:.9;
     }
 
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      color: #fff;
-      overflow: hidden;
-
-      background:
-        radial-gradient(circle at 50% 30%, rgba(120, 120, 120, 0.16), transparent 35%),
-        radial-gradient(circle at 50% 100%, rgba(255, 180, 50, 0.10), transparent 40%),
-        linear-gradient(135deg, #020202 0%, #101010 45%, #020202 100%);
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
+    80%{
+        opacity:.5;
     }
 
-    /* LUZ DE FUNDO */
-    body::before {
-      content: "";
-      position: absolute;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(
-        circle,
-        rgba(255, 255, 255, 0.08),
-        transparent 70%
-      );
-      top: -200px;
-      left: 50%;
-      transform: translateX(-50%);
-      animation: pulsar 5s infinite alternate;
+    100%{
+        transform:translateY(-110vh) translateX(80px);
+        opacity:0;
+    }
+}
+
+/* CONTEÚDO */
+
+.container{
+    position:relative;
+    z-index:5;
+
+    width:100%;
+    max-width:1100px;
+
+    margin:auto;
+
+    padding:30px 20px 45px;
+
+    text-align:center;
+}
+
+/* LOGO */
+
+.logo{
+    width:145px;
+    max-width:35vw;
+
+    display:block;
+    margin:0 auto 12px;
+
+    filter:
+        drop-shadow(0 0 12px rgba(255,255,255,.35))
+        drop-shadow(0 0 25px rgba(255,120,0,.15));
+
+    border-radius:50%;
+}
+
+/* TÍTULO */
+
+.pequeno{
+    font-size:clamp(13px,2.5vw,19px);
+
+    letter-spacing:6px;
+
+    text-transform:uppercase;
+
+    opacity:.85;
+
+    margin-top:10px;
+}
+
+.titulo{
+    font-family:Georgia,serif;
+
+    font-size:clamp(45px,9vw,95px);
+
+    line-height:.95;
+
+    text-transform:uppercase;
+
+    font-weight:900;
+
+    letter-spacing:4px;
+
+    color:#e8c27a;
+
+    text-shadow:
+        0 2px 0 #5a350b,
+        0 4px 20px rgba(0,0,0,.9),
+        0 0 30px rgba(255,150,30,.18);
+
+    margin:10px 0 15px;
+}
+
+.linha{
+    width:230px;
+    max-width:70%;
+
+    height:2px;
+
+    margin:0 auto 15px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #e6a83a,
+            #fff1b0,
+            #e6a83a,
+            transparent
+        );
+}
+
+.subtitulo{
+    font-size:clamp(13px,2.5vw,20px);
+
+    letter-spacing:3px;
+
+    text-transform:uppercase;
+
+    margin-bottom:30px;
+
+    opacity:.9;
+}
+
+/* CONTADOR */
+
+.contador{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:15px;
+
+    max-width:950px;
+
+    margin:auto;
+}
+
+.bloco{
+
+    position:relative;
+
+    padding:22px 10px 18px;
+
+    border:1px solid rgba(231,171,68,.8);
+
+    border-radius:12px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10,10,10,.94),
+            rgba(35,25,15,.88)
+        );
+
+    box-shadow:
+
+        inset 0 0 25px rgba(255,140,0,.08),
+
+        0 0 15px rgba(255,130,0,.10),
+
+        0 12px 30px rgba(0,0,0,.55);
+
+    overflow:hidden;
+}
+
+.bloco::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+    right:0;
+
+    height:3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #ff9d00,
+            #fff0a0,
+            #ff9d00,
+            transparent
+        );
+}
+
+.numero{
+
+    font-size:clamp(42px,8vw,75px);
+
+    font-weight:900;
+
+    line-height:1;
+
+    color:#f2f2f2;
+
+    text-shadow:
+        0 2px 4px #000,
+        0 0 15px rgba(255,255,255,.15);
+}
+
+.label{
+
+    margin-top:12px;
+
+    font-size:clamp(10px,2vw,15px);
+
+    letter-spacing:3px;
+
+    text-transform:uppercase;
+
+    color:#e7aa38;
+
+    font-weight:bold;
+}
+
+/* DATA */
+
+.data{
+
+    display:inline-block;
+
+    margin-top:28px;
+
+    padding:11px 25px;
+
+    border:1px solid rgba(231,171,68,.55);
+
+    border-radius:30px;
+
+    background:rgba(0,0,0,.5);
+
+    font-size:clamp(14px,2.5vw,21px);
+
+    letter-spacing:2px;
+
+    font-weight:bold;
+}
+
+/* VERSÍCULO */
+
+.versiculo{
+
+    margin:27px auto 0;
+
+    max-width:700px;
+
+    font-family:Georgia,serif;
+
+    font-size:clamp(16px,3vw,23px);
+
+    font-style:italic;
+
+    line-height:1.45;
+
+    text-shadow:0 2px 8px #000;
+}
+
+.referencia{
+
+    display:block;
+
+    margin-top:8px;
+
+    color:#e7aa38;
+
+    font-family:Arial,sans-serif;
+
+    font-size:14px;
+
+    font-style:normal;
+
+    letter-spacing:3px;
+}
+
+/* BOTÃO DO SOM */
+
+#som{
+
+    margin-top:28px;
+
+    padding:13px 22px;
+
+    border-radius:30px;
+
+    border:1px solid #e7a632;
+
+    background:rgba(0,0,0,.7);
+
+    color:white;
+
+    font-size:14px;
+
+    font-weight:bold;
+
+    letter-spacing:1px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+#som:hover{
+
+    background:#a86512;
+
+    box-shadow:
+        0 0 20px rgba(255,140,0,.35);
+}
+
+/* FINAL */
+
+.finalizado{
+
+    grid-column:1/-1;
+
+    font-size:clamp(32px,7vw,70px);
+
+    font-weight:900;
+
+    color:#f0c56c;
+
+    padding:30px;
+
+    text-shadow:
+        0 0 20px #ff8c00;
+}
+
+/* CELULAR */
+
+@media(max-width:650px){
+
+    .container{
+        padding-top:20px;
     }
 
-    @keyframes pulsar {
-      from {
-        opacity: 0.4;
-        transform: translateX(-50%) scale(0.9);
-      }
-
-      to {
-        opacity: 0.8;
-        transform: translateX(-50%) scale(1.15);
-      }
+    .logo{
+        width:110px;
     }
 
-    /* PARTÍCULAS */
-    .particula {
-      position: absolute;
-      width: 3px;
-      height: 3px;
-      background: white;
-      border-radius: 50%;
-      opacity: 0;
-      animation: subir 8s infinite linear;
+    .pequeno{
+        letter-spacing:3px;
     }
 
-    .p1 { left: 10%; animation-delay: 1s; }
-    .p2 { left: 25%; animation-delay: 4s; }
-    .p3 { left: 40%; animation-delay: 2s; }
-    .p4 { left: 60%; animation-delay: 6s; }
-    .p5 { left: 75%; animation-delay: 3s; }
-    .p6 { left: 90%; animation-delay: 5s; }
-
-    @keyframes subir {
-      0% {
-        bottom: -10px;
-        opacity: 0;
-      }
-
-      20% {
-        opacity: 0.7;
-      }
-
-      80% {
-        opacity: 0.4;
-      }
-
-      100% {
-        bottom: 110%;
-        opacity: 0;
-      }
+    .titulo{
+        letter-spacing:2px;
     }
 
-    /* CONTEÚDO */
-    .container {
-      position: relative;
-      z-index: 2;
-      width: 94%;
-      max-width: 1100px;
-      text-align: center;
+    .subtitulo{
+        letter-spacing:1px;
+        margin-bottom:22px;
     }
 
-    .simbolo {
-      font-size: 55px;
-      margin-bottom: 8px;
-      filter: drop-shadow(0 0 15px rgba(255,255,255,0.35));
-      animation: flutuar 3s ease-in-out infinite;
+    .contador{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+        gap:10px;
     }
 
-    @keyframes flutuar {
-      0%, 100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-8px);
-      }
+    .bloco{
+        padding:19px 6px 15px;
     }
 
-    .titulo {
-      font-size: clamp(42px, 9vw, 100px);
-      font-weight: 900;
-      letter-spacing: 5px;
-      text-transform: uppercase;
-
-      text-shadow:
-        0 0 10px rgba(255,255,255,0.25),
-        0 0 30px rgba(255,255,255,0.10);
-
-      animation: brilho 4s ease-in-out infinite;
+    .data{
+        padding:10px 14px;
+        letter-spacing:1px;
     }
 
-    @keyframes brilho {
-      0%, 100% {
-        text-shadow:
-          0 0 10px rgba(255,255,255,0.20),
-          0 0 30px rgba(255,255,255,0.08);
-      }
+}
 
-      50% {
-        text-shadow:
-          0 0 15px rgba(255,255,255,0.40),
-          0 0 45px rgba(255,255,255,0.15);
-      }
+@media(max-height:650px){
+
+    .container{
+        transform:scale(.85);
+        transform-origin:top center;
     }
 
-    .linha {
-      width: 180px;
-      height: 2px;
-      margin: 15px auto 20px;
+}
 
-      background: linear-gradient(
-        90deg,
-        transparent,
-        #ffffff,
-        transparent
-      );
-    }
-
-    .subtitulo {
-      font-size: clamp(16px, 3vw, 25px);
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      opacity: 0.85;
-      margin-bottom: 35px;
-    }
-
-    /* CONTADOR */
-    .contador {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      width: 100%;
-      max-width: 900px;
-      margin: auto;
-    }
-
-    .bloco {
-      position: relative;
-      padding: 24px 10px;
-
-      background: rgba(255,255,255,0.055);
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 18px;
-
-      box-shadow:
-        inset 0 0 20px rgba(255,255,255,0.02),
-        0 10px 35px rgba(0,0,0,0.35);
-
-      backdrop-filter: blur(8px);
-    }
-
-    .numero {
-      font-size: clamp(42px, 8vw, 78px);
-      font-weight: 900;
-      line-height: 1;
-
-      text-shadow:
-        0 0 15px rgba(255,255,255,0.25);
-    }
-
-    .label {
-      margin-top: 12px;
-      font-size: clamp(11px, 2vw, 16px);
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      opacity: 0.65;
-    }
-
-    /* DATA */
-    .data {
-      margin-top: 35px;
-      font-size: clamp(15px, 3vw, 22px);
-      letter-spacing: 2px;
-      opacity: 0.9;
-    }
-
-    /* VERSÍCULO */
-    .versiculo {
-      margin: 35px auto 0;
-      max-width: 750px;
-      font-size: clamp(16px, 3vw, 23px);
-      font-style: italic;
-      line-height: 1.5;
-      opacity: 0.88;
-    }
-
-    .referencia {
-      display: block;
-      margin-top: 8px;
-      font-size: 14px;
-      font-style: normal;
-      letter-spacing: 2px;
-      opacity: 0.65;
-    }
-
-    /* MENSAGEM FINAL */
-    .finalizado {
-      font-size: clamp(32px, 8vw, 75px);
-      font-weight: 900;
-      text-transform: uppercase;
-      animation: brilho 2s infinite;
-    }
-
-    /* CELULAR */
-    @media (max-width: 650px) {
-
-      body {
-        overflow-y: auto;
-      }
-
-      .container {
-        padding: 30px 5px;
-      }
-
-      .simbolo {
-        font-size: 42px;
-      }
-
-      .titulo {
-        letter-spacing: 3px;
-      }
-
-      .subtitulo {
-        margin-bottom: 25px;
-        letter-spacing: 2px;
-      }
-
-      .contador {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-      }
-
-      .bloco {
-        padding: 20px 8px;
-      }
-
-      .data {
-        margin-top: 25px;
-      }
-
-      .versiculo {
-        margin-top: 25px;
-      }
-    }
-
-    @media (max-height: 650px) {
-      .container {
-        transform: scale(0.82);
-      }
-    }
-  </style>
+</style>
 </head>
 
 <body>
 
-  <!-- PARTÍCULAS -->
-  <div class="particula p1"></div>
-  <div class="particula p2"></div>
-  <div class="particula p3"></div>
-  <div class="particula p4"></div>
-  <div class="particula p5"></div>
-  <div class="particula p6"></div>
+<!-- FUNDO -->
+<div class="fundo"></div>
 
-  <!-- CONTEÚDO -->
-  <main class="container">
+<!-- BRASAS -->
+<div class="brasas" id="brasas"></div>
 
-    <div class="simbolo">⚔️</div>
+
+<div class="container">
+
+    <!-- LOGO DA IGREJA -->
+    <img
+        src="logo-igreja.png"
+        class="logo"
+        alt="Igreja Evangélica Nazareno Camaçari"
+    >
+
+    <div class="pequeno">
+        Culto de
+    </div>
 
     <h1 class="titulo">
-      Guerreiro de Fé
+        Homens
     </h1>
 
     <div class="linha"></div>
 
     <div class="subtitulo">
-      Uma geração preparada para a batalha
+        Homens de Aliança • Ninguém Caminha Sozinho
     </div>
+
 
     <!-- CONTADOR -->
-    <div id="contador" class="contador">
 
-      <div class="bloco">
-        <div id="dias" class="numero">00</div>
-        <div class="label">Dias</div>
-      </div>
+    <div
+        id="contador"
+        class="contador"
+    >
 
-      <div class="bloco">
-        <div id="horas" class="numero">00</div>
-        <div class="label">Horas</div>
-      </div>
+        <div class="bloco">
 
-      <div class="bloco">
-        <div id="minutos" class="numero">00</div>
-        <div class="label">Minutos</div>
-      </div>
+            <div
+                id="dias"
+                class="numero"
+            >
+                00
+            </div>
 
-      <div class="bloco">
-        <div id="segundos" class="numero">00</div>
-        <div class="label">Segundos</div>
-      </div>
+            <div class="label">
+                Dias
+            </div>
+
+        </div>
+
+
+        <div class="bloco">
+
+            <div
+                id="horas"
+                class="numero"
+            >
+                00
+            </div>
+
+            <div class="label">
+                Horas
+            </div>
+
+        </div>
+
+
+        <div class="bloco">
+
+            <div
+                id="minutos"
+                class="numero"
+            >
+                00
+            </div>
+
+            <div class="label">
+                Minutos
+            </div>
+
+        </div>
+
+
+        <div class="bloco">
+
+            <div
+                id="segundos"
+                class="numero"
+            >
+                00
+            </div>
+
+            <div class="label">
+                Segundos
+            </div>
+
+        </div>
 
     </div>
+
 
     <div class="data">
-      24 DE OUTUBRO DE 2026 • 19:30
+
+        24 DE OUTUBRO DE 2026
+        &nbsp; • &nbsp;
+        19H30
+
     </div>
+
 
     <div class="versiculo">
-      “Sê forte e corajoso; não temas, nem te espantes.”
-      <span class="referencia">
-        Josué 1:9
-      </span>
+
+        “Sê forte e corajoso;
+        não temas, nem te espantes.”
+
+        <span class="referencia">
+            JOSUÉ 1:9
+        </span>
+
     </div>
 
-  </main>
 
-  <script>
+    <button
+        id="som"
+        onclick="alternarSom()"
+    >
+        🔥 ATIVAR SOM • FOGO QUEIMANDO
+    </button>
 
-    /*
-      EVENTO:
-      24 DE OUTUBRO DE 2026
-      ÀS 19:30
-      HORÁRIO DE BRASÍLIA
-    */
-
-    const dataEvento =
-      new Date("2026-10-24T19:30:00-03:00").getTime();
+</div>
 
 
-    function atualizarContador() {
+<script>
 
-      const agora = new Date().getTime();
+/* =========================
+   CONTADOR
+========================= */
 
-      const diferenca = dataEvento - agora;
+const dataEvento =
+new Date(
+    "2026-10-24T19:30:00-03:00"
+).getTime();
 
 
-      /* QUANDO O EVENTO CHEGAR */
+function atualizarContador(){
 
-      if (diferenca <= 0) {
+    const agora =
+        new Date().getTime();
 
-        document.getElementById("contador").innerHTML =
-          '<div class="finalizado">⚔️ O MOMENTO CHEGOU! ⚔️</div>';
+    const diferenca =
+        dataEvento - agora;
 
-        document.querySelector(".subtitulo").textContent =
-          "Guerreiro de Fé";
+
+    if(diferenca <= 0){
+
+        document.getElementById(
+            "contador"
+        ).innerHTML =
+
+        '<div class="finalizado">🔥 O MOMENTO CHEGOU! 🔥</div>';
 
         return;
-      }
-
-
-      /* CALCULANDO TEMPO */
-
-      const dias =
-        Math.floor(
-          diferenca /
-          (1000 * 60 * 60 * 24)
-        );
-
-
-      const horas =
-        Math.floor(
-          (diferenca %
-          (1000 * 60 * 60 * 24)) /
-          (1000 * 60 * 60)
-        );
-
-
-      const minutos =
-        Math.floor(
-          (diferenca %
-          (1000 * 60 * 60)) /
-          (1000 * 60)
-        );
-
-
-      const segundos =
-        Math.floor(
-          (diferenca %
-          (1000 * 60)) /
-          1000
-        );
-
-
-      /* ATUALIZANDO A TELA */
-
-      document.getElementById("dias").textContent =
-        String(dias).padStart(2, "0");
-
-      document.getElementById("horas").textContent =
-        String(horas).padStart(2, "0");
-
-      document.getElementById("minutos").textContent =
-        String(minutos).padStart(2, "0");
-
-      document.getElementById("segundos").textContent =
-        String(segundos).padStart(2, "0");
-
     }
 
 
-    /* INICIA O CONTADOR */
+    const dias =
+        Math.floor(
+            diferenca /
+            (1000*60*60*24)
+        );
 
-    atualizarContador();
+
+    const horas =
+        Math.floor(
+            (diferenca %
+            (1000*60*60*24)) /
+            (1000*60*60)
+        );
 
 
-    /* ATUALIZA A CADA SEGUNDO */
+    const minutos =
+        Math.floor(
+            (diferenca %
+            (1000*60*60)) /
+            (1000*60)
+        );
 
-    setInterval(
-      atualizarContador,
-      1000
-    );
 
-  </script>
+    const segundos =
+        Math.floor(
+            (diferenca %
+            (1000*60)) /
+            1000
+        );
+
+
+    document.getElementById(
+        "dias"
+    ).textContent =
+        String(dias).padStart(2,"0");
+
+
+    document.getElementById(
+        "horas"
+    ).textContent =
+        String(horas).padStart(2,"0");
+
+
+    document.getElementById(
+        "minutos"
+    ).textContent =
+        String(minutos).padStart(2,"0");
+
+
+    document.getElementById(
+        "segundos"
+    ).textContent =
+        String(segundos).padStart(2,"0");
+
+}
+
+
+atualizarContador();
+
+setInterval(
+    atualizarContador,
+    1000
+);
+
+
+/* =========================
+   BRASAS
+========================= */
+
+const brasas =
+document.getElementById("brasas");
+
+
+for(let i=0;i<35;i++){
+
+    const brasa =
+        document.createElement("div");
+
+    brasa.className="brasa";
+
+    brasa.style.left =
+        Math.random()*100+"%";
+
+    brasa.style.animationDuration =
+        (4+Math.random()*7)+"s";
+
+    brasa.style.animationDelay =
+        (Math.random()*8)+"s";
+
+    brasa.style.transform =
+        `scale(${0.5+Math.random()})`;
+
+    brasas.appendChild(brasa);
+}
+
+
+/* =========================
+   SOM DE FOGO
+========================= */
+
+let audioContext = null;
+
+let ganho = null;
+
+let oscilador = null;
+
+let ruido = null;
+
+let somLigado = false;
+
+
+function criarSom(){
+
+    audioContext =
+        new (
+            window.AudioContext ||
+            window.webkitAudioContext
+        )();
+
+
+    ganho =
+        audioContext.createGain();
+
+    ganho.gain.value = 0.035;
+
+
+    /* RUÍDO */
+
+    const buffer =
+        audioContext.createBuffer(
+            1,
+            audioContext.sampleRate * 2,
+            audioContext.sampleRate
+        );
+
+
+    const dados =
+        buffer.getChannelData(0);
+
+
+    for(let i=0;i<dados.length;i++){
+
+        dados[i] =
+            Math.random()*2-1;
+    }
+
+
+    ruido =
+        audioContext.createBufferSource();
+
+    ruido.buffer=buffer;
+
+    ruido.loop=true;
+
+
+    const filtro =
+        audioContext.createBiquadFilter();
+
+    filtro.type="lowpass";
+
+    filtro.frequency.value=650;
+
+
+    ruido
+        .connect(filtro)
+        .connect(ganho)
+        .connect(audioContext.destination);
+
+
+    ruido.start();
+
+
+    /* ESTALOS */
+
+    oscilador =
+        audioContext.createOscillator();
+
+    oscilador.type="sine";
+
+    oscilador.frequency.value=55;
+
+
+    const ganhoGrave =
+        audioContext.createGain();
+
+    ganhoGrave.gain.value=.012;
+
+
+    oscilador
+        .connect(ganhoGrave)
+        .connect(audioContext.destination);
+
+    oscilador.start();
+
+}
+
+
+function alternarSom(){
+
+    if(!somLigado){
+
+        criarSom();
+
+        somLigado=true;
+
+        document.getElementById(
+            "som"
+        ).innerHTML =
+            "🔥 SOM ATIVADO • FOGO QUEIMANDO";
+
+    }else{
+
+        if(audioContext){
+
+            audioContext.suspend();
+
+        }
+
+        somLigado=false;
+
+        document.getElementById(
+            "som"
+        ).innerHTML =
+            "🔇 ATIVAR SOM • FOGO QUEIMANDO";
+
+    }
+
+}
+
+</script>
 
 </body>
 </html>
