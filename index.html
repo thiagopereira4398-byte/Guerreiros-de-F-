@@ -26,7 +26,9 @@ body{
     overflow-x:hidden;
 }
 
-/* FUNDO DO EVENTO */
+/* =========================
+   FUNDO DO EVENTO
+========================= */
 
 .fundo{
     position:fixed;
@@ -34,19 +36,18 @@ body{
 
     background-image:
         linear-gradient(
-            rgba(0,0,0,.62),
+            rgba(0,0,0,.60),
             rgba(0,0,0,.78)
         ),
         url("fundo-evento.jpg");
 
     background-size:cover;
     background-position:center;
+
     z-index:-3;
 
     transform:scale(1.03);
 }
-
-/* BRILHO QUENTE */
 
 .fundo::after{
     content:"";
@@ -61,13 +62,15 @@ body{
         ),
         linear-gradient(
             90deg,
-            rgba(0,0,0,.45),
+            rgba(0,0,0,.40),
             transparent,
-            rgba(0,0,0,.45)
+            rgba(0,0,0,.40)
         );
 }
 
-/* BRASAS */
+/* =========================
+   BRASAS VISUAIS
+========================= */
 
 .brasas{
     position:fixed;
@@ -117,7 +120,9 @@ body{
     }
 }
 
-/* CONTEÚDO */
+/* =========================
+   CONTEÚDO
+========================= */
 
 .container{
     position:relative;
@@ -133,7 +138,9 @@ body{
     text-align:center;
 }
 
-/* LOGO */
+/* =========================
+   LOGO
+========================= */
 
 .logo{
     width:145px;
@@ -149,7 +156,9 @@ body{
     border-radius:50%;
 }
 
-/* TÍTULO */
+/* =========================
+   TÍTULO
+========================= */
 
 .pequeno{
     font-size:clamp(13px,2.5vw,19px);
@@ -217,7 +226,9 @@ body{
     opacity:.9;
 }
 
-/* CONTADOR */
+/* =========================
+   CONTADOR
+========================= */
 
 .contador{
 
@@ -314,7 +325,9 @@ body{
     font-weight:bold;
 }
 
-/* DATA */
+/* =========================
+   DATA
+========================= */
 
 .data{
 
@@ -337,7 +350,9 @@ body{
     font-weight:bold;
 }
 
-/* VERSÍCULO */
+/* =========================
+   VERSÍCULO
+========================= */
 
 .versiculo{
 
@@ -373,19 +388,21 @@ body{
     letter-spacing:3px;
 }
 
-/* BOTÃO DO SOM */
+/* =========================
+   BOTÃO DA TRILHA
+========================= */
 
 #som{
 
     margin-top:28px;
 
-    padding:13px 22px;
+    padding:13px 24px;
 
     border-radius:30px;
 
     border:1px solid #e7a632;
 
-    background:rgba(0,0,0,.7);
+    background:rgba(0,0,0,.75);
 
     color:white;
 
@@ -398,6 +415,9 @@ body{
     cursor:pointer;
 
     transition:.3s;
+
+    box-shadow:
+        0 0 15px rgba(255,140,0,.12);
 }
 
 #som:hover{
@@ -405,10 +425,12 @@ body{
     background:#a86512;
 
     box-shadow:
-        0 0 20px rgba(255,140,0,.35);
+        0 0 25px rgba(255,140,0,.40);
 }
 
-/* FINAL */
+/* =========================
+   MENSAGEM FINAL
+========================= */
 
 .finalizado{
 
@@ -426,7 +448,9 @@ body{
         0 0 20px #ff8c00;
 }
 
-/* CELULAR */
+/* =========================
+   CELULAR
+========================= */
 
 @media(max-width:650px){
 
@@ -487,35 +511,46 @@ body{
 <!-- FUNDO -->
 <div class="fundo"></div>
 
-<!-- BRASAS -->
+<!-- BRASAS VISUAIS -->
 <div class="brasas" id="brasas"></div>
 
+
+<!-- =========================
+     CONTEÚDO
+========================= -->
 
 <div class="container">
 
     <!-- LOGO DA IGREJA -->
+
     <img
         src="logo-igreja.png"
         class="logo"
         alt="Igreja Evangélica Nazareno Camaçari"
     >
 
+
     <div class="pequeno">
         Culto de
     </div>
+
 
     <h1 class="titulo">
         Homens
     </h1>
 
+
     <div class="linha"></div>
+
 
     <div class="subtitulo">
         Homens de Aliança • Ninguém Caminha Sozinho
     </div>
 
 
-    <!-- CONTADOR -->
+    <!-- =========================
+         CONTADOR
+    ========================= -->
 
     <div
         id="contador"
@@ -588,6 +623,8 @@ body{
     </div>
 
 
+    <!-- DATA -->
+
     <div class="data">
 
         24 DE OUTUBRO DE 2026
@@ -596,6 +633,8 @@ body{
 
     </div>
 
+
+    <!-- VERSÍCULO -->
 
     <div class="versiculo">
 
@@ -609,14 +648,28 @@ body{
     </div>
 
 
+    <!-- BOTÃO DA MÚSICA -->
+
     <button
         id="som"
-        onclick="alternarSom()"
+        onclick="alternarTrilha()"
     >
-        🔥 ATIVAR SOM • FOGO QUEIMANDO
+        🎵 ATIVAR TRILHA • GUERREIRO DE FÉ
     </button>
 
 </div>
+
+
+<!-- =========================
+     MÚSICA
+========================= -->
+
+<audio
+    id="trilha"
+    src="guerreiro-de-fe-trilha-original.wav"
+    loop
+    preload="auto">
+</audio>
 
 
 <script>
@@ -646,7 +699,7 @@ function atualizarContador(){
             "contador"
         ).innerHTML =
 
-        '<div class="finalizado">🔥 O MOMENTO CHEGOU! 🔥</div>';
+        '<div class="finalizado">⚔️ O MOMENTO CHEGOU! ⚔️</div>';
 
         return;
     }
@@ -749,133 +802,51 @@ for(let i=0;i<35;i++){
 
 
 /* =========================
-   SOM DE FOGO
+   CONTROLE DA TRILHA
 ========================= */
 
-let audioContext = null;
-
-let ganho = null;
-
-let oscilador = null;
-
-let ruido = null;
-
-let somLigado = false;
+const trilha =
+    document.getElementById("trilha");
 
 
-function criarSom(){
-
-    audioContext =
-        new (
-            window.AudioContext ||
-            window.webkitAudioContext
-        )();
+let trilhaLigada = false;
 
 
-    ganho =
-        audioContext.createGain();
+function alternarTrilha(){
 
-    ganho.gain.value = 0.035;
+    if(!trilhaLigada){
 
+        trilha.volume = 0.45;
 
-    /* RUÍDO */
+        trilha.play()
+        .then(() => {
 
-    const buffer =
-        audioContext.createBuffer(
-            1,
-            audioContext.sampleRate * 2,
-            audioContext.sampleRate
-        );
+            trilhaLigada = true;
 
+            document.getElementById(
+                "som"
+            ).innerHTML =
+                "🔊 TRILHA ATIVADA • GUERREIRO DE FÉ";
 
-    const dados =
-        buffer.getChannelData(0);
+        })
+        .catch(() => {
 
+            alert(
+                "Toque novamente no botão para iniciar a trilha."
+            );
 
-    for(let i=0;i<dados.length;i++){
-
-        dados[i] =
-            Math.random()*2-1;
-    }
-
-
-    ruido =
-        audioContext.createBufferSource();
-
-    ruido.buffer=buffer;
-
-    ruido.loop=true;
-
-
-    const filtro =
-        audioContext.createBiquadFilter();
-
-    filtro.type="lowpass";
-
-    filtro.frequency.value=650;
-
-
-    ruido
-        .connect(filtro)
-        .connect(ganho)
-        .connect(audioContext.destination);
-
-
-    ruido.start();
-
-
-    /* ESTALOS */
-
-    oscilador =
-        audioContext.createOscillator();
-
-    oscilador.type="sine";
-
-    oscilador.frequency.value=55;
-
-
-    const ganhoGrave =
-        audioContext.createGain();
-
-    ganhoGrave.gain.value=.012;
-
-
-    oscilador
-        .connect(ganhoGrave)
-        .connect(audioContext.destination);
-
-    oscilador.start();
-
-}
-
-
-function alternarSom(){
-
-    if(!somLigado){
-
-        criarSom();
-
-        somLigado=true;
-
-        document.getElementById(
-            "som"
-        ).innerHTML =
-            "🔥 SOM ATIVADO • FOGO QUEIMANDO";
+        });
 
     }else{
 
-        if(audioContext){
+        trilha.pause();
 
-            audioContext.suspend();
-
-        }
-
-        somLigado=false;
+        trilhaLigada = false;
 
         document.getElementById(
             "som"
         ).innerHTML =
-            "🔇 ATIVAR SOM • FOGO QUEIMANDO";
+            "🎵 ATIVAR TRILHA • GUERREIRO DE FÉ";
 
     }
 
